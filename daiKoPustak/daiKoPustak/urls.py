@@ -14,8 +14,22 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.http import HttpResponse
+
+def index(request):
+    return HttpResponse("HELLO")
+
+
+
+def out(request):
+    return HttpResponse("logged out")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('',index),
+    path('users/',include('users.urls',namespace='users')),
+    
+   
+    path('out/',out,name="logout")
 ]
