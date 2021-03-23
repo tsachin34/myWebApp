@@ -16,9 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.http import HttpResponse
-
-def index(request):
-    return HttpResponse("HELLO")
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 
@@ -27,9 +26,8 @@ def out(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',index),
-    path('users/',include('users.urls',namespace='users')),
-    
+    path('',include('users.urls',namespace='users')),
+    path('books/',include('books.urls',namespace='books')),
    
     path('out/',out,name="logout")
-]
+]+static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

@@ -1,11 +1,13 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render
-
+from django.views.generic import TemplateView
 # Create your views here.
 from django.urls.base import reverse_lazy
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponseRedirect
 from .forms import UserForm
+
+
 
 
 def signUpView(request):
@@ -31,3 +33,7 @@ def signUpView(request):
         }
 
     return render(request, 'users/signup.html', context)
+
+
+class HomePage(TemplateView):
+    template_name='users/index.html'

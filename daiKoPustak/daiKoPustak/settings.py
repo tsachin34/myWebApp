@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
-    'bootstrapform'
+    'bootstrapform',
+    'books',
+    'reviews'
 ]
 
 MIDDLEWARE = [
@@ -127,10 +129,13 @@ USE_L10N = True
 
 USE_TZ = True
 
-LOGIN_REDIRECT_URL = 'users:logged' 
+LOGIN_REDIRECT_URL = '/' 
 
 
 LOGOUT_REDIRECT_URL = '/'
+
+
+
 
 
 # Static files (CSS, JavaScript, Images)
@@ -141,3 +146,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     STATIC_DIR,
 ]
+
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_URL = '/media/'
+
+AUTH_USER_MODEL = "users.User"
