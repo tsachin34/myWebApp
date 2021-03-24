@@ -15,12 +15,13 @@
         <div class="col-md-10 offset-md-1">
             <h1 class="text-center">All Files</h1>
             <div class="card py-2 px-2">
-                <a class="btn btn-success btn-sm ml-auto mb-2" href="/products/postFile">Add New File</a>
+            
                 <table class="table-striped">
                     <tr>
                         <th>Title</th>
                         <th>Image</th>
                         <th>Description</th>
+                        <th>Edit</th>
                     </tr>
                     {% for book in books %}
                     {{book.image.url}}
@@ -28,12 +29,23 @@
                         <td> {{ book.title }}</td>
                         <td> <img src="{{book.image.url}}" alt="file_image" width="100"></td>
                         <td> {{ book.author }}</td>
+                        <td>  {% if user == book.author %}
+                            <a href="#" class="btn btn-primary">Edit</a>
+                            {% endif %}
+                            </td>
+                            
                         <!-- <td><a href="/products/updateFile/{{file.id}}" class="btn btn-primary btn-sm">Edit</a> &nbsp;
                             <a href="/products/deleteFile/{{file.id}}" class="btn btn-danger btn-sm"
                                onclick="return confirm('Are you sure want to delete this file?')">Delete</a></td> -->
 
                     </tr>
+                  
+
+                   
                     {% endfor %}
+                    
+
+                    
 
                 </table>
             </div>

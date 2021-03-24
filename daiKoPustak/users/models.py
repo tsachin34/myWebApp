@@ -16,7 +16,9 @@ class User(AbstractUser):
 
 
     education= models.PositiveBigIntegerField(choices=EDU_CHOICES,blank=True,null=True)
+    slug = models.SlugField(null=True)
 
+    
     def __str__(self):
         return self.username
 

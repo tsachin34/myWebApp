@@ -18,6 +18,7 @@ class UserForm(UserCreationForm):
         def save(self):
             user = User.objects.create(
                 education=self.cleaned_data['education'],
+                slug=self.cleaned_data['username']
 
             )
             return user

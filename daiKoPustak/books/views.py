@@ -45,9 +45,10 @@ class BookListView(FormView, TemplateView):
                 context['add_book_form']=add_book_form
 
         if 'update_book_form' in request.POST:
+            print("i am here")
             update_book_form=UpdateBookForm(request.POST,request.FILES)
             if update_book_form.is_valid():
-                book=BookDetail.objects.filter(pk=self.kwargs['slug'])
+                book=BookDetail.objects.filter(pk=self.kwargs['pk'])
                 update_book_form.save(book)
 
             else:

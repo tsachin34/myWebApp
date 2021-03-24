@@ -10,7 +10,7 @@ class Review(models.Model):
     
 
     user = models.ForeignKey(User,related_name="user_profile",on_delete=models.CASCADE)
-    reviwer= models.ForeignKey(User,related_name='reviewer',on_delete=models.CASCADE)
+    # reviwer= models.ForeignKey(User,related_name='reviewer',on_delete=models.CASCADE)
     published_date= models.DateTimeField(default=timezone.now)
     ratings = models.PositiveIntegerField(validators=[MinValueValidator(0),MaxValueValidator(5)])
     # richtextfield to give editing options in editor
