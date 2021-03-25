@@ -15,6 +15,7 @@ path('login/',auth_views.LoginView.as_view(template_name='users/login.html'),nam
 path('signup',views.signUpView,name='signup'),
 path('logout/', auth_views.LogoutView.as_view(), name="logout"),
 re_path(r'profile/(?P<slug>[-\w]+)/$', views.ProfileView.as_view(), name="userprofile"),
+re_path(r'profile/(?P<slug>[-\w]+)/(?P<pk>[-\w]+)/$', views.BookDetailsView.as_view(), name="bookdetail"),
 re_path(r'delete_post/(?P<slug>[-\w]+)/(?P<pk>[-\w]+)/$', views.deleteBook, name='deletebook')
 
 ]

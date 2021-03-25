@@ -111,16 +111,51 @@ def deleteBook(request,slug,pk):
     return redirect('users:userprofile',slug=slug)
 
 
-class BookDetailsView(FormView. TemplateView):
+class BookDetailsView(FormView, TemplateView):
     modal = BookDetail
     template_name='users/book_details.html'
     form_class = UpdateBookForm
 
     def get_context_data(self, **kwargs):
-        context = super(ProfileView, self).get_context_data(**kwargs)
-        books = BookDetail.objects.all()
-        context['books']=books
+        context = super(BookDetailsView, self).get_context_data(**kwargs)
+        book = BookDetail.objects.filter(pk=self.kwargs['pk']).first()
+        context['book']=book
         if 'update_book_form' not in context:
             context['update_book_form']=UpdateBookForm()
         return context
 
+    
+    def post(self,request, *args, **kwargs):
+        
+        context={
+
+        }
+        user=User.objects.filter(username=self.kwargs['slug']).first()
+        print(user)
+
+        if 'update_book_form' in request.POST:
+            update_book_form=UpdateBookForm(request.POST,request.FILES)
+            if update_book_form.is_valid():
+                book=BookDetail.objects.filter(pk=self.kwargs['pk']).first()
+                print("Hello 4367456354")
+                print(book)
+                update_book_form.save(book)
+
+            else:
+                context['update_book_form']= update_book_form
+
+
+        
+        return render(request, self.template_name, self.get_context_data(**context))
+
+    def get(self, request, *args, **kwargs):
+        if request.method == 'GET':
+            search_query = request.GET.get('search_box', None)
+            queryset = []
+            for i in BookDetail.objects.all():
+                if search_query:
+                    if i.title.find(search_query) != -1:
+                        queryset.append(i)
+            self.posts = queryset
+        return render(request, self.template_name, self.get_context_data())
+    
