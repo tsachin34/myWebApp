@@ -24,3 +24,13 @@ class BookDetail(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Bid(models.Model):
+    book= models.ForeignKey(BookDetail,on_delete=models.CASCADE)
+    bidder= models.ForeignKey(User,on_delete=models.CASCADE)
+    amount = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return str(self.book) +" " + str(self.amount)
+    

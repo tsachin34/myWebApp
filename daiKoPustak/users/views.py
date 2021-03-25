@@ -10,8 +10,8 @@ from .forms import UserForm
 
 from .models import User
 
-from books.forms import AddBookForm, UpdateBookForm
-from books.models import BookDetail
+from books.forms import AddBookForm, UpdateBookForm, AddBidForm
+from books.models import BookDetail, Bid
 
 
 
@@ -52,14 +52,14 @@ class ProfileView(FormView, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(ProfileView, self).get_context_data(**kwargs)
-        books = BookDetail.objects.all()
+        books = BookDetail.objects.filter(author__username=self.kwargs['slug'])
         context['books']=books
         if 'add_book_form' not in context:
             context['add_book_form'] = AddBookForm()
         if 'update_book_form' not in context:
             context['update_book_form']=UpdateBookForm()
         return context
-         
+       
 
    
     def post(self,request, *args, **kwargs):
@@ -68,7 +68,6 @@ class ProfileView(FormView, TemplateView):
 
         }
         user=User.objects.filter(username=self.kwargs['slug']).first()
-        print(user)
         if 'add_book_form' in request.POST:
             
             add_book_form = AddBookForm(request.POST,request.FILES)
@@ -88,6 +87,8 @@ class ProfileView(FormView, TemplateView):
             else:
                 context['update_book_form']= update_book_form
 
+
+        
 
         
         return render(request, self.template_name, self.get_context_data(**context))
@@ -119,9 +120,15 @@ class BookDetailsView(FormView, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(BookDetailsView, self).get_context_data(**kwargs)
         book = BookDetail.objects.filter(pk=self.kwargs['pk']).first()
+        if Bid.objects.filter(book=book).exists():
+            highest_bid=Bid.objects.filter(book=book).order_by('-amount').first()
+            print(highest_bid.amount)
+            context['highest_bid']=highest_bid
         context['book']=book
         if 'update_book_form' not in context:
             context['update_book_form']=UpdateBookForm()
+        if 'add_bid_form' not in context:
+            context['add_bid_form'] = AddBidForm()
         return context
 
     
@@ -137,12 +144,19 @@ class BookDetailsView(FormView, TemplateView):
             update_book_form=UpdateBookForm(request.POST,request.FILES)
             if update_book_form.is_valid():
                 book=BookDetail.objects.filter(pk=self.kwargs['pk']).first()
-                print("Hello 4367456354")
-                print(book)
                 update_book_form.save(book)
 
             else:
                 context['update_book_form']= update_book_form
+        if 'add_bid_form' in request.POST:
+            add_bid_form= AddBidForm(request.POST)
+            if add_bid_form.is_valid():
+                bidder= user
+                book=BookDetail.objects.filter(pk=self.kwargs['pk']).first()
+                add_bid_form.save(book,bidder)
+
+            else:
+                context['add_bid_form']= add_bid_form
 
 
         
@@ -159,3 +173,14 @@ class BookDetailsView(FormView, TemplateView):
             self.posts = queryset
         return render(request, self.template_name, self.get_context_data())
     
+
+
+class ShowUsersView(TemplateView):
+    template_name='users/all_users.html'
+    model = User
+
+    def get_context_data(self, **kwargs):
+        context = super(ShowUsersView, self).get_context_data(**kwargs)
+        users = User.objects.all()
+        context['users']=users
+        return context

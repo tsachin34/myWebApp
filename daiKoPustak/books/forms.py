@@ -1,6 +1,6 @@
 from django.db.models import fields
 from django.forms import ModelForm
-from .models import BookDetail
+from .models import BookDetail, Bid
 from django.core.files.base import ContentFile, File 
 import os
 import urllib.request
@@ -41,3 +41,16 @@ class UpdateBookForm(ModelForm):
         return book
 
     
+
+class AddBidForm(ModelForm):
+    class Meta:
+        exclude =('bidder','book')
+        model= Bid
+
+    def save(self,book,bidder):
+       bid = Bid.objects.create(
+        book=book,
+        bidder=bidder,
+        amount=self.cleaned_data['amount']
+       )
+

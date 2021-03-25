@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+
+{% block content %}
+
+  {% for user in users  %}
+  <div>
+      <a href="{% url 'users:userprofile' slug=user.username %}" class="btn btn-success">{{user.username}}</a>
+  </div>
+    
+  {% endfor %}
+{% endblock content %}
